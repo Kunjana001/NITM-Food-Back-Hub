@@ -17,7 +17,7 @@ document.getElementById("dislikeBtn").addEventListener("click", () => {
 });
 
 /* ============================================================
-   MAIN FEEDBACK STAR RATING 
+   MAIN FEEDBACK STAR RATING
 ============================================================ */
 const starContainer = document.getElementById("stars");
 const stars = starContainer.querySelectorAll("span");
@@ -310,4 +310,65 @@ function generateSummary() {
 ----------------------------- */
 displayFeedbackWall();
 generateSummary();
+/* ============================================================
+   PERSONAL FOOD STATS (LIKES + AVG RATING)  — FIXED
+============================================================ */
 
+let likedMeals = JSON.parse(localStorage.getItem("likedMeals") || "[]");
+let mealRatings = JSON.parse(localStorage.getItem("mealRatings") || "{}");
+
+// Attach listeners only AFTER HTML is ready
+window.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".meal-card").forEach(card => {
+        const mealName = card.dataset.meal;
+
+        // LIKE BUTTON
+        const likeBtn = card.querySelector(".like-btn");
+        likeBtn.addEventListener("click", () => {
+            if (!likedMeals.includes(mealName)) {
+                likedMeals.push(mealName);
+                localStorage.setItem("likedMeals", JSON.stringify(likedMeals));
+                updateFoodStats();
+            }
+        });
+
+        // STAR RATINGS
+        card.querySelectorAll(".rate-btn").forEach(star => {
+            star.addEventListener("click", () => {
+                const rating = parseInt(star.dataset.rate);
+
+                mealRatings[mealName] = rating;
+                localStorage.setItem("mealRatings", JSON.stringify(mealRatings));
+
+                updateFoodStats();
+            });
+        });
+    });
+
+    updateFoodStats();
+});
+
+
+/* Update “My Food Stats” section */
+function updateFoodStats() {
+    // Meals liked count
+    document.getElementById("likedCount").innerText = likedMeals.length;
+
+    // Average rating
+    let total = 0, count = 0;
+    Object.values(mealRatings).forEach(r => {
+        total += r;
+        count++;
+    });
+
+    document.getElementById("avgRating").innerText =
+        count ? (total / count).toFixed(1) : 0;
+
+    // Favorite meal list
+    const favList = document.getElementById("favoriteMeals");
+    favList.innerHTML = "";
+
+    likedMeals.forEach(meal => {
+        favList.innerHTML += `<li>❤️ ${meal}</li>`;
+    });
+}
