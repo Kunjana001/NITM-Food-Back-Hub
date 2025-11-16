@@ -48,46 +48,56 @@
   <!-- FEEDBACK FORM -->
   <h2>Rate Today’s Meal ⭐</h2>
 
-  <form id="feedbackForm">
+  <form id="feedbackForm" class="feedback-form">
 
-    <label class="label">Quick Rating</label>
-    <div class="quick-rating">
-      <button type="button" class="btn" id="likeBtn">👍 Liked It</button>
-      <button type="button" class="btn" id="dislikeBtn">👎 Disliked It</button>
-    </div>
+  <label class="label">Quick Rating</label>
+  <div class="quick-rating">
+    <button type="button" class="btn" id="likeBtn">👍 Liked It</button>
+    <button type="button" class="btn" id="dislikeBtn">👎 Disliked It</button>
+  </div>
 
-    <!-- Star Rating -->
-    <label class="label">Star Rating</label>
-    <div class="stars" id="stars">
-      <span data-star="1">★</span>
-      <span data-star="2">★</span>
-      <span data-star="3">★</span>
-      <span data-star="4">★</span>
-      <span data-star="5">★</span>
-    </div>
+  <!-- Star Rating -->
+  <label class="label">Star Rating</label>
+  <div class="stars" id="stars">
+    <span data-star="1">★</span>
+    <span data-star="2">★</span>
+    <span data-star="3">★</span>
+    <span data-star="4">★</span>
+    <span data-star="5">★</span>
+  </div>
 
-    <label class="label">Feedback (Optional)</label>
-    <textarea id="feedbackText" class="input" rows="4" placeholder="Write your feedback..."></textarea>
+  <!-- Feedback Text -->
+  <label class="label">Feedback (Optional)</label>
+  <textarea id="feedbackText" class="input" rows="4" placeholder="Write your feedback..."></textarea>
 
-    <label class="label">Upload Food Photo (Optional)</label>
-    <input type="file" id="photoInput" accept="image/*">
-    <img id="photoPreview" class="preview" style="display:none; max-width:200px; margin-top:10px;">
+  <!-- Upload -->
+  <label class="label">Upload Food Photo (Optional)</label>
+  <input type="file" id="photoInput" accept="image/*" class="input-file">
 
-    <button type="submit" class="submit-btn">Submit Feedback</button>
-  </form>
+  <!-- Preview -->
+  <div class="img-preview-box">
+    <img id="photoPreview" class="preview" style="display:none;">
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" class="submit-btn">Submit Feedback</button>
+
+</form>
+
 
   <!-- SUMMARY -->
   <h2>📊 Feedback Summary</h2>
   <button class="summary-btn" onclick="generateSummary()">Generate Summary</button>
   <p id="summaryOutput" class="summary-box">Summary will appear here...</p>
 
-  <!-- WALL -->
+  <!-- FEEDBACK WALL -->
   <h2>💬 Student Feedback Wall</h2>
   <div id="feedbackWall" class="feedback-wall"></div>
 
 </div>
 
 
+<!-- MEAL RATING SECTION -->
 <h2>🍽️ Rate Individual Meals</h2>
 
 <div class="meal-list">
@@ -146,7 +156,7 @@
 
 </div>
 
-
+<!-- STATS SECTION -->
 <section id="stats-section">
     <h2>📊 My Food Stats</h2>
 
@@ -156,7 +166,6 @@
     <h3>❤️ Favorite Meals</h3>
     <ul id="favoriteMeals"></ul>
 </section>
-
 
 <script src="foodhub.js"></script>
 </body>
