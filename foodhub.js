@@ -1,374 +1,184 @@
-/* ============================================================
-   THEME TOGGLE
-============================================================ */
+// -------------------- MENU DATA --------------------
+const weeklyMenu = {
+  Monday:    { breakfast: "Poori Sabji", lunch: "Dal, Rice, Aloo Fry", dinner: "Roti, Paneer Curry", drink: "Lassi" },
+  Tuesday:   { breakfast: "Idli Sambhar", lunch: "Rajma Rice", dinner: "Roti, Chicken Curry", drink: "Buttermilk" },
+  Wednesday: { breakfast: "Upma", lunch: "Curd Rice", dinner: "Veg Biryani", drink: "Juice" },
+  Thursday:  { breakfast: "Aloo Paratha", lunch: "Dal Fry, Rice", dinner: "Roti, Egg Curry", drink: "Buttermilk" },
+  Friday:    { breakfast: "Dosa", lunch: "Chole Rice", dinner: "Roti, Paneer Masala", drink: "Lime Juice" },
+  Saturday:  { breakfast: "Poha", lunch: "Veg Thali", dinner: "Chicken Biryani", drink: "Milkshake" },
+  Sunday:    { breakfast: "Chole Bhature", lunch: "Fried Rice", dinner: "Roti, Mixed Veg", drink: "Juice" }
+};
+
+// -------------------- LOAD MENU --------------------
+function loadMenu(day) {
+  const menu = weeklyMenu[day];
+
+  document.getElementById("breakfastItem").innerText = menu.breakfast;
+  document.getElementById("lunchItem").innerText = menu.lunch;
+  document.getElementById("dinnerItem").innerText = menu.dinner;
+  document.getElementById("drinkItem").innerText = menu.drink;
+
+  document.getElementById("menuHeader").innerText = `${day}'s Special 🍽️`;
+}
+
+document.getElementById("daySelect").addEventListener("change", (e) => {
+  loadMenu(e.target.value);
+});
+
+loadMenu("Monday");
+
+// -------------------- THEME SWITCH (FIXED) --------------------
 document.getElementById("themeToggle").addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
+  document.body.classList.toggle("dark-theme");
+
+  // Save theme so it stays after reload
+  const mode = document.body.classList.contains("dark-theme") ? "dark" : "light";
+  localStorage.setItem("themeMode", mode);
 });
 
-/* ============================================================
-   QUICK LIKE / DISLIKE BUTTONS
-============================================================ */
-document.getElementById("likeBtn").addEventListener("click", () => {
-    alert("You liked today's meal! ❤️");
-});
+// Load previous theme
+if (localStorage.getItem("themeMode") === "dark") {
+  document.body.classList.add("dark-theme");
+}
 
-document.getElementById("dislikeBtn").addEventListener("click", () => {
-    alert("You disliked today's meal 😢");
-});
-
-/* ============================================================
-   MAIN FEEDBACK STAR RATING
-============================================================ */
-const starContainer = document.getElementById("stars");
-const stars = starContainer.querySelectorAll("span");
-let selectedRating = 0;
-
-stars.forEach(star => {
-    star.addEventListener("click", () => {
-        selectedRating = star.dataset.star;
-
-        // Reset all stars
-        stars.forEach(s => s.classList.remove("selected"));
-
-        // Highlight selected stars
-        for (let i = 0; i < selectedRating; i++) {
-            stars[i].classList.add("selected");
-        }
-
-        alert(`You rated today's meal ${selectedRating} ⭐`);
-    });
-});
-
-/* ============================================================
-   PHOTO PREVIEW
-============================================================ */
-document.getElementById("photoInput").addEventListener("change", function () {
-    const file = this.files[0];
-    const preview = document.getElementById("photoPreview");
-
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
-    }
-});
-
-/* ============================================================
-   INDIVIDUAL MEALS → LIKE BUTTONS
-============================================================ */
+// -------------------- STAR RATING --------------------
+let selectedStars = 0;
+// LIKE BUTTON POPUP
 document.querySelectorAll(".like-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const meal = btn.parentElement.dataset.meal;
-        alert(`You liked ${meal}! ❤️`);
-    });
+  btn.addEventListener("click", () => {
+    let meal = btn.closest(".meal-card").dataset.meal;
+
+    likedCount++;
+    document.getElementById("likedCount").innerText = likedCount;
+
+    alert(`❤️ You liked ${meal}!`);
+  });
 });
 
-/* ============================================================
-   INDIVIDUAL MEALS → STAR RATING
-============================================================ */
-document.querySelectorAll(".meal-card").forEach(card => {
-    const stars = card.querySelectorAll(".rate-btn");
+// STAR RATING POPUP
+document.querySelectorAll(".rate-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    let stars = Number(btn.dataset.rate);
+    let meal = btn.closest(".meal-card").dataset.meal;
 
-    stars.forEach(star => {
-        star.addEventListener("click", () => {
-            let rating = star.dataset.rate;
+    ratingSum += stars;
+    ratingCount++;
+    document.getElementById("avgRating").innerText = (ratingSum / ratingCount).toFixed(1);
 
-            // Remove previous selection
-            stars.forEach(s => s.classList.remove("selected"));
-
-            // Highlight selected stars
-            stars.forEach(s => {
-                if (s.dataset.rate <= rating) {
-                    s.classList.add("selected");
-                }
-            });
-
-            alert(`You rated ${card.dataset.meal} ${rating} ⭐`);
-        });
-    });
+    alert(`⭐ You rated ${meal} ${stars} star(s)!`);
+  });
 });
 
-/* ============================================================
-   FEEDBACK FORM SUBMIT
-============================================================ */
-document.getElementById("feedbackForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    alert("Feedback submitted successfully! 🎉");
-});
 
-// Meal Star Rating (kept fully separate from special meal)
-document.querySelectorAll(".meal-card").forEach(card => {
-    const stars = card.querySelectorAll(".rate-btn");
 
-    stars.forEach(star => {
-        star.addEventListener("click", () => {
-            const rating = star.dataset.rate;
-
-            // Reset previous stars
-            stars.forEach(s => s.classList.remove("selected"));
-
-            // Highlight correct stars
-            stars.forEach(s => {
-                if (s.dataset.rate <= rating) {
-                    s.classList.add("selected");
-                }
-            });
-
-            alert(`You rated ${card.dataset.meal} ${rating} ⭐`);
-        });
-    });
-});
-
-document.getElementById("daySelect").addEventListener("change", updateMenu);
-
-function updateMenu() {
-    const day = document.getElementById("daySelect").value;
-
-    const breakfast = document.getElementById("breakfastItem");
-    const lunch = document.getElementById("lunchItem");
-    const dinner = document.getElementById("dinnerItem");
-    const drink = document.getElementById("drinkItem");
-
-    const banner = document.getElementById("menuHeader");
-    const delayAlert = document.getElementById("delayAlert");
-
-    // Reset
-    banner.innerHTML = "";
-    delayAlert.style.display = "none";
-
-    // -----------------------------
-    // DAILY MENU DATA
-    // -----------------------------
-    const menu = {
-        Monday: {
-            breakfast: "Aloo Paratha with Curd",
-            lunch: "Dal Tadka + Rice + Veg Fry",
-            dinner: "Roti + Chicken Curry",
-            drink: "Lassi"
-        },
-        Tuesday: {
-            breakfast: "Idli & Sambhar",
-            lunch: "Rajma Chawal",
-            dinner: "Roti + Paneer Masala",
-            drink: "Lemon Water"
-        },
-        Wednesday: {
-            breakfast: "Poori Bhaji",
-            lunch: "Veg Biryani, Raita",
-            dinner: "Dal + Roti + Mix Veg",
-            drink: "Buttermilk"
-        },
-        Thursday: {
-            breakfast: "Upma & Chutney",
-            lunch: "Chole + Rice",
-            dinner: "Roti + Egg Curry",
-            drink: "Mango Shake"
-        },
-        Friday: {
-            breakfast: "Masala Dosa",
-            lunch: "Fish Curry + Rice",
-            dinner: "Roti + Paneer Do Pyaza",
-            drink: "Jaljeera"
-        },
-        Saturday: {
-            breakfast: "Bread Omelette",
-            lunch: "Fried Rice + Manchurian",
-            dinner: "Khichdi + Papad",
-            drink: "Cold Coffee"
-        },
-        Sunday: {
-            breakfast: "Chole Bhature",
-            lunch: "Paneer Butter Masala + Naan",
-            dinner: "Veg Pulao + Raita",
-            drink: "Rose Milk"
-        }
-    };
-
-    // -----------------------------
-    // SET MENU
-    // -----------------------------
-    breakfast.innerHTML = menu[day].breakfast;
-    lunch.innerHTML = menu[day].lunch;
-    dinner.innerHTML = menu[day].dinner;
-    drink.innerHTML = menu[day].drink;
-
-    // -----------------------------
-    // SPECIAL MENU (banner)
-    // -----------------------------
-    if (day === "Wednesday") {
-        banner.innerHTML = "🌟 Special Menu Today: Veg Biryani, Raita & Gulab Jamun";
-    }
-
-    if (day === "Sunday") {
-        banner.innerHTML = "🌟 Special Menu Today: Paneer Butter Masala, Naan & Kheer";
-    }
-
-    // -----------------------------
-    // FOOD DELAY ALERTS
-    // -----------------------------
-    if (day === "Monday") {
-        delayAlert.innerHTML = "⚠️ Lunch is delayed by 15 minutes today.";
-        delayAlert.style.display = "block";
-    }
-
-    if (day === "Thursday") {
-        delayAlert.innerHTML = "⚠️ Dinner is delayed today due to late supplies.";
-        delayAlert.style.display = "block";
-    }
+function highlightStars(count) {
+  document.querySelectorAll("#stars span").forEach(star => {
+    star.style.color = star.dataset.star <= count ? "gold" : "#999";
+  });
 }
 
-// Call once on page load
-updateMenu();
-/* ============================================================
-   FEEDBACK SYSTEM – SAVE + DISPLAY + SUMMARY
-============================================================ */
+// -------------------- PHOTO PREVIEW --------------------
+document.getElementById("photoInput").addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
 
-let allFeedback = JSON.parse(localStorage.getItem("allFeedback") || "[]");
-
-/* -----------------------------
-   SUBMIT FEEDBACK
------------------------------ */
-document.getElementById("feedbackForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const feedbackText = document.getElementById("feedbackText").value;
-    const rating = selectedRating;
-    const fileInput = document.getElementById("photoInput");
-    let photoURL = "";
-
-    if (fileInput.files[0]) {
-        photoURL = URL.createObjectURL(fileInput.files[0]);
-    }
-
-    const feedbackEntry = {
-        text: feedbackText || "(No written feedback)",
-        rating: rating,
-        photo: photoURL,
-        time: new Date().toLocaleString()
-    };
-
-    allFeedback.push(feedbackEntry);
-    localStorage.setItem("allFeedback", JSON.stringify(allFeedback));
-
-    //alert("Feedback submitted successfully! 🎉");
-
-    displayFeedbackWall();
-    generateSummary();
-
-    document.getElementById("feedbackForm").reset();
-    document.getElementById("photoPreview").style.display = "none";
-    selectedRating = 0;
-    stars.forEach(s => s.classList.remove("selected"));
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = document.getElementById("photoPreview");
+    img.src = e.target.result;
+    img.style.display = "block";
+  }
+  reader.readAsDataURL(file);
 });
 
-/* -----------------------------
-   DISPLAY FEEDBACK WALL
------------------------------ */
-function displayFeedbackWall() {
-    const wall = document.getElementById("feedbackWall");
-    wall.innerHTML = "";
+// -------------------- FEEDBACK SUBMIT --------------------
+document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    allFeedback.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "feedback-card";
+  const text = document.getElementById("feedbackText").value;
+  const photo = document.getElementById("photoPreview").src || "";
+  const stars = selectedStars;
 
-        div.innerHTML = `
-            <div class="feedback-text">
-                <p><strong>Rating:</strong> ${item.rating} ⭐</p>
-                <p>${item.text}</p>
-                <p class="feedback-time">${item.time}</p>
-            </div>
-            ${item.photo ? `<img src="${item.photo}" class="feedback-photo">` : ""}
-        `;
+  const entry = {
+    feedback: text,
+    stars: stars,
+    photo: photo,
+    date: new Date().toLocaleString()
+  };
 
-        wall.appendChild(div);
-    });
-}
+  let list = JSON.parse(localStorage.getItem("feedbackList") || "[]");
+  list.push(entry);
 
-/* -----------------------------
-   SUMMARY GENERATION
------------------------------ */
-function generateSummary() {
-    const output = document.getElementById("summaryOutput");
+  localStorage.setItem("feedbackList", JSON.stringify(list));
 
-    if (allFeedback.length === 0) {
-        output.innerText = "No feedback submitted yet.";
-        return;
-    }
+  showFeedbackWall();
+  showSummary();
 
-    const avg =
-        (allFeedback.reduce((sum, f) => sum + Number(f.rating), 0) /
-            allFeedback.length).toFixed(1);
+  alert("Feedback Submitted ✔");
+});
 
-    output.innerHTML = `
-        <strong>Total feedback entries:</strong> ${allFeedback.length}<br>
-        <strong>Average star rating:</strong> ${avg} ⭐
+// -------------------- FEEDBACK WALL --------------------
+function showFeedbackWall() {
+  const wall = document.getElementById("feedbackWall");
+  wall.innerHTML = "";
+
+  const list = JSON.parse(localStorage.getItem("feedbackList") || "[]");
+
+  list.forEach(item => {
+    const box = document.createElement("div");
+    box.className = "feedback-box";
+
+    box.innerHTML = `
+      <p><strong>⭐ ${item.stars}</strong></p>
+      <p>${item.feedback}</p>
+      ${item.photo ? `<img src="${item.photo}" class="wall-img">` : ""}
+      <small>${item.date}</small>
     `;
+
+    wall.appendChild(box);
+  });
 }
 
-/* -----------------------------
-   INITIAL LOAD
------------------------------ */
-displayFeedbackWall();
-generateSummary();
-/* ============================================================
-   PERSONAL FOOD STATS (LIKES + AVG RATING)  — FIXED
-============================================================ */
+showFeedbackWall();
 
-let likedMeals = JSON.parse(localStorage.getItem("likedMeals") || "[]");
-let mealRatings = JSON.parse(localStorage.getItem("mealRatings") || "{}");
+// -------------------- SUMMARY --------------------
+function showSummary() {
+  const list = JSON.parse(localStorage.getItem("feedbackList") || "[]");
+  if (list.length === 0) return;
 
-// Attach listeners only AFTER HTML is ready
-window.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".meal-card").forEach(card => {
-        const mealName = card.dataset.meal;
+  let totalStars = 0;
+  list.forEach(f => totalStars += Number(f.stars));
 
-        // LIKE BUTTON
-        const likeBtn = card.querySelector(".like-btn");
-        likeBtn.addEventListener("click", () => {
-            if (!likedMeals.includes(mealName)) {
-                likedMeals.push(mealName);
-                localStorage.setItem("likedMeals", JSON.stringify(likedMeals));
-                updateFoodStats();
-            }
-        });
+  const avg = (totalStars / list.length).toFixed(1);
 
-        // STAR RATINGS
-        card.querySelectorAll(".rate-btn").forEach(star => {
-            star.addEventListener("click", () => {
-                const rating = parseInt(star.dataset.rate);
+  document.getElementById("summaryOutput").innerText =
+    `Total Feedback: ${list.length} | Average Rating: ${avg} ⭐`;
+}
 
-                mealRatings[mealName] = rating;
-                localStorage.setItem("mealRatings", JSON.stringify(mealRatings));
+showSummary();
 
-                updateFoodStats();
-            });
-        });
-    });
+// -------------------- LIKE + RATING BUTTONS (FULLY FIXED) --------------------
+let likedCount = 0;
+let ratingSum = 0;
+let ratingCount = 0;
 
-    updateFoodStats();
+// Like button
+document.querySelectorAll(".like-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    likedCount++;
+    document.getElementById("likedCount").innerText = likedCount;
+  });
 });
 
+// Rating buttons
+document.querySelectorAll(".rate-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const value = Number(btn.dataset.rate);
+    
+    ratingSum += value;
+    ratingCount++;
 
-/* Update “My Food Stats” section */
-function updateFoodStats() {
-    // Meals liked count
-    document.getElementById("likedCount").innerText = likedMeals.length;
-
-    // Average rating
-    let total = 0, count = 0;
-    Object.values(mealRatings).forEach(r => {
-        total += r;
-        count++;
-    });
-
-    document.getElementById("avgRating").innerText =
-        count ? (total / count).toFixed(1) : 0;
-
-    // Favorite meal list
-    const favList = document.getElementById("favoriteMeals");
-    favList.innerHTML = "";
-
-    likedMeals.forEach(meal => {
-        favList.innerHTML += `<li>❤️ ${meal}</li>`;
-    });
-}
+    const avg = (ratingSum / ratingCount).toFixed(1);
+    document.getElementById("avgRating").innerText = avg;
+  });
+});
