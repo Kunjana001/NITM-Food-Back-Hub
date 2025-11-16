@@ -17,54 +17,68 @@
 <div class="container">
 
   <!-- MENU -->
-  <h2>Today's Menu</h2>
+<!-- Only relevant part for menu, rest stays same -->
+<h2>Today's Menu</h2>
+<select id="daySelect" class="select">
+  <option>Monday</option>
+  <option>Tuesday</option>
+  <option>Wednesday</option>
+  <option>Thursday</option>
+  <option>Friday</option>
+  <option>Saturday</option>
+  <option>Sunday</option>
+</select>
 
-  <select id="daySelect" class="select">
-    <option>Monday</option>
-    <option>Tuesday</option>
-    <option>Wednesday</option>
-    <option>Thursday</option>
-    <option>Friday</option>
-    <option>Saturday</option>
-    <option>Sunday</option>
-  </select>
+<div id="menuHeader" class="special-banner"></div>
 
-  <div class="menu-card">
-      <p><strong>Breakfast:</strong> <span id="breakfastItem"></span></p>
-      <p><strong>Lunch:</strong> <span id="lunchItem"></span></p>
-      <p><strong>Dinner:</strong> <span id="dinnerItem"></span></p>
-      <p><strong>Drinks:</strong> <span id="drinkItem"></span></p>
-  </div>
+<h3>Breakfast</h3>
+<p id="breakfastItem"></p>
+
+<h3>Lunch</h3>
+<p id="lunchItem"></p>
+
+<h3>Dinner</h3>
+<p id="dinnerItem"></p>
+
+<h3>Drinks</h3>
+<p id="drinkItem"></p>
+
+
 
   <!-- FEEDBACK FORM -->
   <h2>Rate Today’s Meal ⭐</h2>
 
-  <form id="feedbackForm">
+<form id="feedbackForm">
 
-    <label>Quick Rating</label>
-    <div class="quick-rating">
-      <button type="button" id="likeBtn" class="btn">👍 Liked</button>
-      <button type="button" id="dislikeBtn" class="btn">👎 Disliked</button>
-    </div>
+  <!-- Quick Rating -->
+  <label class="label">Quick Rating</label>
+  <div class="quick-rating">
+    <button type="button" class="btn" id="likeBtn">👍 Liked It</button>
+    <button type="button" class="btn" id="dislikeBtn">👎 Disliked It</button>
+  </div>
 
-    <label>Star Rating</label>
-    <div id="stars" class="stars">
-      <span data-star="1">★</span>
-      <span data-star="2">★</span>
-      <span data-star="3">★</span>
-      <span data-star="4">★</span>
-      <span data-star="5">★</span>
-    </div>
-    <label>Upload Food Photo (Optional)</label>
-<input type="file" id="photoInput" accept="image/*">
-<img id="photoPreview" class="preview" style="display:none;">
+  <!-- Star Rating -->
+  <label class="label">Star Rating</label>
+  <div class="stars" id="stars">
+    <span data-star="1">★</span>
+    <span data-star="2">★</span>
+    <span data-star="3">★</span>
+    <span data-star="4">★</span>
+    <span data-star="5">★</span>
+  </div>
 
+  <!-- Feedback Text -->
+  <label class="label">Feedback (Optional)</label>
+  <textarea id="feedbackText" class="input" rows="4" placeholder="Write your feedback..."></textarea>
 
-    <label>Feedback</label>
-    <textarea id="feedback" class="input" rows="3" placeholder="Write your feedback..."></textarea>
+  <!-- Photo Upload -->
+  <label class="label">Upload Food Photo (Optional)</label>
+  <input type="file" id="photoInput" accept="image/*">
+  <img id="photoPreview" class="preview" style="display:none; max-width:200px; margin-top:10px;">
 
-    <button type="submit" class="submit-btn">Submit</button>
-  </form>
+  <!-- Submit -->
+  <button type="submit" class="submit-btn">Submit Feedback</button>
+</form>
 
   <!-- SUMMARY -->
   <h2>📊 Feedback Summary</h2>
