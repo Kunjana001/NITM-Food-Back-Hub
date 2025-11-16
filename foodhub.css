@@ -205,3 +205,64 @@ h2, h3 {
   color: #ff99cc;
   border: 3px solid #ff55c7;
 }
+/* Feedback Card Layout Fix */
+.feedback-card {
+  background: rgba(255,255,255,0.75);
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.dark-mode .feedback-card {
+  background: rgba(40,40,70,0.5);
+}
+
+/* Left side (text) */
+.feedback-text {
+  flex: 1;
+}
+
+/* Uploaded photo */
+.feedback-photo {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Time */
+.feedback-time {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 5px;
+}
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-file {
+  padding: 8px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.img-preview-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.preview {
+  max-width: 200px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+}
