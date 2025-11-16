@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIT Meghalaya Hostel - Mess Portal</title>
+  <link rel="stylesheet" href="foodhub.css">
+</head>
+
+<body>
+
+<header class="header">
+  <h1>🍽️ Hostel Mess Feedback Portal</h1>
+  <button id="themeToggle" class="theme-toggle">🌙</button>
+</header>
+
+<div class="container">
+
+  <!-- MENU -->
+  <h2>Today's Menu</h2>
+
+  <select id="daySelect" class="select">
+    <option>Monday</option>
+    <option>Tuesday</option>
+    <option>Wednesday</option>
+    <option>Thursday</option>
+    <option>Friday</option>
+    <option>Saturday</option>
+    <option>Sunday</option>
+  </select>
+
+  <div class="menu-card">
+      <p><strong>Breakfast:</strong> <span id="breakfastItem"></span></p>
+      <p><strong>Lunch:</strong> <span id="lunchItem"></span></p>
+      <p><strong>Dinner:</strong> <span id="dinnerItem"></span></p>
+      <p><strong>Drinks:</strong> <span id="drinkItem"></span></p>
+  </div>
+
+  <!-- FEEDBACK FORM -->
+  <h2>Rate Today’s Meal ⭐</h2>
+
+  <form id="feedbackForm">
+
+    <label>Quick Rating</label>
+    <div class="quick-rating">
+      <button type="button" id="likeBtn" class="btn">👍 Liked</button>
+      <button type="button" id="dislikeBtn" class="btn">👎 Disliked</button>
+    </div>
+
+    <label>Star Rating</label>
+    <div id="stars" class="stars">
+      <span data-star="1">★</span>
+      <span data-star="2">★</span>
+      <span data-star="3">★</span>
+      <span data-star="4">★</span>
+      <span data-star="5">★</span>
+    </div>
+    <label>Upload Food Photo (Optional)</label>
+<input type="file" id="photoInput" accept="image/*">
+<img id="photoPreview" class="preview" style="display:none;">
+
+
+    <label>Feedback</label>
+    <textarea id="feedback" class="input" rows="3" placeholder="Write your feedback..."></textarea>
+
+    <button type="submit" class="submit-btn">Submit</button>
+  </form>
+
+  <!-- SUMMARY -->
+  <h2>📊 Feedback Summary</h2>
+  <button class="summary-btn" onclick="generateSummary()">Generate Summary</button>
+  <p id="summaryOutput" class="summary-box">Summary will appear here...</p>
+
+  <!-- WALL -->
+  <h2>💬 Student Feedback Wall</h2>
+  <div id="feedbackWall" class="feedback-wall"></div>
+
+</div>
+
+<script src="foodhub.js"></script>
+</body>
+</html>
+
+
+
+
+
+

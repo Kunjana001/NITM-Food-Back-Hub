@@ -1,0 +1,89 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding-bottom: 50px;
+}
+
+.dark {
+  background: #121212;
+  color: white;
+}
+
+.header {
+  background: #ff914d;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.theme-toggle {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  padding: 10px;
+  border: none;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  max-width: 800px;
+}
+
+.menu-card, .feedback-card, .summary-box {
+  background: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px gray;
+}
+
+.dark .menu-card, 
+.dark .feedback-card,
+.dark .summary-box {
+  background: #1e1e1e;
+  box-shadow: 0px 2px 10px #000;
+}
+
+.quick-rating button {
+  margin-right: 10px;
+}
+
+.stars span {
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.stars span:hover {
+  transform: scale(1.2);
+}
+
+.submit-btn, .summary-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: #ff914d;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.feedback-wall {
+  margin-top: 10px;
+}
+
+.feedback-card {
+  margin-bottom: 10px;
+}
+
+
+
+
+
