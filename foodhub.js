@@ -218,3 +218,96 @@ function updateMenu() {
 
 // Call once on page load
 updateMenu();
+/* ============================================================
+   FEEDBACK SYSTEM – SAVE + DISPLAY + SUMMARY
+============================================================ */
+
+let allFeedback = JSON.parse(localStorage.getItem("allFeedback") || "[]");
+
+/* -----------------------------
+   SUBMIT FEEDBACK
+----------------------------- */
+document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const feedbackText = document.getElementById("feedbackText").value;
+    const rating = selectedRating;
+    const fileInput = document.getElementById("photoInput");
+    let photoURL = "";
+
+    if (fileInput.files[0]) {
+        photoURL = URL.createObjectURL(fileInput.files[0]);
+    }
+
+    const feedbackEntry = {
+        text: feedbackText || "(No written feedback)",
+        rating: rating,
+        photo: photoURL,
+        time: new Date().toLocaleString()
+    };
+
+    allFeedback.push(feedbackEntry);
+    localStorage.setItem("allFeedback", JSON.stringify(allFeedback));
+
+    alert("Feedback submitted successfully! 🎉");
+
+    displayFeedbackWall();
+    generateSummary();
+
+    document.getElementById("feedbackForm").reset();
+    document.getElementById("photoPreview").style.display = "none";
+    selectedRating = 0;
+    stars.forEach(s => s.classList.remove("selected"));
+});
+
+/* -----------------------------
+   DISPLAY FEEDBACK WALL
+----------------------------- */
+function displayFeedbackWall() {
+    const wall = document.getElementById("feedbackWall");
+    wall.innerHTML = "";
+
+    allFeedback.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "feedback-card";
+
+        div.innerHTML = `
+            <div class="feedback-text">
+                <p><strong>Rating:</strong> ${item.rating} ⭐</p>
+                <p>${item.text}</p>
+                <p class="feedback-time">${item.time}</p>
+            </div>
+            ${item.photo ? `<img src="${item.photo}" class="feedback-photo">` : ""}
+        `;
+
+        wall.appendChild(div);
+    });
+}
+
+/* -----------------------------
+   SUMMARY GENERATION
+----------------------------- */
+function generateSummary() {
+    const output = document.getElementById("summaryOutput");
+
+    if (allFeedback.length === 0) {
+        output.innerText = "No feedback submitted yet.";
+        return;
+    }
+
+    const avg =
+        (allFeedback.reduce((sum, f) => sum + Number(f.rating), 0) /
+            allFeedback.length).toFixed(1);
+
+    output.innerHTML = `
+        <strong>Total feedback entries:</strong> ${allFeedback.length}<br>
+        <strong>Average star rating:</strong> ${avg} ⭐
+    `;
+}
+
+/* -----------------------------
+   INITIAL LOAD
+----------------------------- */
+displayFeedbackWall();
+generateSummary();
+
