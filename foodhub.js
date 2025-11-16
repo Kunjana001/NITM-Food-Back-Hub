@@ -17,7 +17,7 @@ document.getElementById("dislikeBtn").addEventListener("click", () => {
 });
 
 /* ============================================================
-   MAIN FEEDBACK STAR RATING
+   MAIN FEEDBACK STAR RATING 
 ============================================================ */
 const starContainer = document.getElementById("stars");
 const stars = starContainer.querySelectorAll("span");
