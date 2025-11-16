@@ -249,7 +249,7 @@ document.getElementById("feedbackForm").addEventListener("submit", function (e) 
     allFeedback.push(feedbackEntry);
     localStorage.setItem("allFeedback", JSON.stringify(allFeedback));
 
-    alert("Feedback submitted successfully! 🎉");
+    //alert("Feedback submitted successfully! 🎉");
 
     displayFeedbackWall();
     generateSummary();
