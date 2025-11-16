@@ -1,0 +1,109 @@
+/* Background gradient */
+body {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  background: linear-gradient(135deg, #0047ab, #ffc107);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Slight blur overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+
+
+
+
+/* Login card */
+.login-card {
+  width: 380px;
+  padding: 30px;
+  border-radius: 18px;
+  background: #ffffffdd;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  text-align: center;
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.nit-logo {
+  width: 95px;
+  margin-bottom: 10px;
+}
+
+.portal-title {
+  font-size: 26px;
+  margin: 0;
+  font-weight: 700;
+  color: #003b7a;
+}
+
+.portal-subtitle {
+  margin-top: 4px;
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 17px;
+}
+
+/* Inputs */
+.label {
+  display: block;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 5px;
+  color: #002d62;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #0047ab;
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.input:focus {
+  border-color: #ffc107;
+}
+
+/* Box spacing */
+.selection-box {
+  margin-bottom: 18px;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #0047ab;
+  color: white;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #002f6c;
+}
+
+/* Hide/Show class */
+.hidden {
+  display: none;
+}
+
+
