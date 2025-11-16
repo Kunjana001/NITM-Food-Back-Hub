@@ -16,69 +16,65 @@
 
 <div class="container">
 
+  <div id="delayAlert" class="delay-alert" style="display:none;"></div>
+
   <!-- MENU -->
-<!-- Only relevant part for menu, rest stays same -->
-<h2>Today's Menu</h2>
-<select id="daySelect" class="select">
-  <option>Monday</option>
-  <option>Tuesday</option>
-  <option>Wednesday</option>
-  <option>Thursday</option>
-  <option>Friday</option>
-  <option>Saturday</option>
-  <option>Sunday</option>
-</select>
+  <h2>Today's Menu</h2>
+  <select id="daySelect" class="select">
+    <option>Monday</option>
+    <option>Tuesday</option>
+    <option>Wednesday</option>
+    <option>Thursday</option>
+    <option>Friday</option>
+    <option>Saturday</option>
+    <option>Sunday</option>
+  </select>
 
-<div id="menuHeader" class="special-banner"></div>
+  <div id="menuHeader" class="special-banner"></div>
 
-<h3>Breakfast</h3>
-<p id="breakfastItem"></p>
+  <h3>Breakfast</h3>
+  <p id="breakfastItem"></p>
 
-<h3>Lunch</h3>
-<p id="lunchItem"></p>
+  <h3>Lunch</h3>
+  <p id="lunchItem"></p>
 
-<h3>Dinner</h3>
-<p id="dinnerItem"></p>
+  <h3>Dinner</h3>
+  <p id="dinnerItem"></p>
 
-<h3>Drinks</h3>
-<p id="drinkItem"></p>
-
+  <h3>Drinks</h3>
+  <p id="drinkItem"></p>
 
 
   <!-- FEEDBACK FORM -->
   <h2>Rate Today’s Meal ⭐</h2>
 
-<form id="feedbackForm">
+  <form id="feedbackForm">
 
-  <!-- Quick Rating -->
-  <label class="label">Quick Rating</label>
-  <div class="quick-rating">
-    <button type="button" class="btn" id="likeBtn">👍 Liked It</button>
-    <button type="button" class="btn" id="dislikeBtn">👎 Disliked It</button>
-  </div>
+    <label class="label">Quick Rating</label>
+    <div class="quick-rating">
+      <button type="button" class="btn" id="likeBtn">👍 Liked It</button>
+      <button type="button" class="btn" id="dislikeBtn">👎 Disliked It</button>
+    </div>
 
-  <!-- Star Rating -->
-  <label class="label">Star Rating</label>
-  <div class="stars" id="stars">
-    <span data-star="1">★</span>
-    <span data-star="2">★</span>
-    <span data-star="3">★</span>
-    <span data-star="4">★</span>
-    <span data-star="5">★</span>
-  </div>
+    <!-- Star Rating -->
+    <label class="label">Star Rating</label>
+    <div class="stars" id="stars">
+      <span data-star="1">★</span>
+      <span data-star="2">★</span>
+      <span data-star="3">★</span>
+      <span data-star="4">★</span>
+      <span data-star="5">★</span>
+    </div>
 
-  <!-- Feedback Text -->
-  <label class="label">Feedback (Optional)</label>
-  <textarea id="feedbackText" class="input" rows="4" placeholder="Write your feedback..."></textarea>
+    <label class="label">Feedback (Optional)</label>
+    <textarea id="feedbackText" class="input" rows="4" placeholder="Write your feedback..."></textarea>
 
-  <!-- Photo Upload -->
-  <label class="label">Upload Food Photo (Optional)</label>
-  <input type="file" id="photoInput" accept="image/*">
-  <img id="photoPreview" class="preview" style="display:none; max-width:200px; margin-top:10px;">
+    <label class="label">Upload Food Photo (Optional)</label>
+    <input type="file" id="photoInput" accept="image/*">
+    <img id="photoPreview" class="preview" style="display:none; max-width:200px; margin-top:10px;">
 
-  <!-- Submit -->
-  <button type="submit" class="submit-btn">Submit Feedback</button>
-</form>
+    <button type="submit" class="submit-btn">Submit Feedback</button>
+  </form>
 
   <!-- SUMMARY -->
   <h2>📊 Feedback Summary</h2>
@@ -91,12 +87,77 @@
 
 </div>
 
+
+<h2>🍽️ Rate Individual Meals</h2>
+
+<div class="meal-list">
+
+  <div class="meal-card" data-meal="Paneer Butter Masala">
+      <h3>Paneer Butter Masala</h3>
+      <button class="like-btn">❤️ Like</button>
+
+      <div class="rating">
+          <span class="rate-btn" data-rate="1">⭐</span>
+          <span class="rate-btn" data-rate="2">⭐</span>
+          <span class="rate-btn" data-rate="3">⭐</span>
+          <span class="rate-btn" data-rate="4">⭐</span>
+          <span class="rate-btn" data-rate="5">⭐</span>
+      </div>
+  </div>
+
+  <div class="meal-card" data-meal="Chicken Curry">
+      <h3>Chicken Curry</h3>
+      <button class="like-btn">❤️ Like</button>
+
+      <div class="rating">
+          <span class="rate-btn" data-rate="1">⭐</span>
+          <span class="rate-btn" data-rate="2">⭐</span>
+          <span class="rate-btn" data-rate="3">⭐</span>
+          <span class="rate-btn" data-rate="4">⭐</span>
+          <span class="rate-btn" data-rate="5">⭐</span>
+      </div>
+  </div>
+
+  <div class="meal-card" data-meal="Veg Biryani">
+      <h3>Veg Biryani</h3>
+      <button class="like-btn">❤️ Like</button>
+
+      <div class="rating">
+          <span class="rate-btn" data-rate="1">⭐</span>
+          <span class="rate-btn" data-rate="2">⭐</span>
+          <span class="rate-btn" data-rate="3">⭐</span>
+          <span class="rate-btn" data-rate="4">⭐</span>
+          <span class="rate-btn" data-rate="5">⭐</span>
+      </div>
+  </div>
+
+  <div class="meal-card" data-meal="Aloo Paratha">
+      <h3>Aloo Paratha</h3>
+      <button class="like-btn">❤️ Like</button>
+
+      <div class="rating">
+          <span class="rate-btn" data-rate="1">⭐</span>
+          <span class="rate-btn" data-rate="2">⭐</span>
+          <span class="rate-btn" data-rate="3">⭐</span>
+          <span class="rate-btn" data-rate="4">⭐</span>
+          <span class="rate-btn" data-rate="5">⭐</span>
+      </div>
+  </div>
+
+</div>
+
+
+<section id="stats-section">
+    <h2>📊 My Food Stats</h2>
+
+    <p><strong>Meals liked this week:</strong> <span id="likedCount">0</span></p>
+    <p><strong>Average Rating:</strong> <span id="avgRating">0</span> ⭐</p>
+
+    <h3>❤️ Favorite Meals</h3>
+    <ul id="favoriteMeals"></ul>
+</section>
+
+
 <script src="foodhub.js"></script>
 </body>
 </html>
-
-
-
-
-
-
