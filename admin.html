@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FoodHub — Admin Panel</title>
+  <link rel="stylesheet" href="foodhub.css">
+  <style>
+    body { padding:18px; }
+    .admin-header { display:flex; gap:12px; align-items:center; justify-content:space-between; }
+    .admin-grid { display:grid; grid-template-columns: 1fr 380px; gap:20px; margin-top:18px; }
+    .card { background: rgba(255,255,255,0.9); padding:14px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .small { font-size:0.9rem; color:#555; }
+    .table { width:100%; border-collapse:collapse; margin-top:10px; }
+    .table th, .table td { padding:8px 6px; border-bottom:1px solid #eee; text-align:left; vertical-align:middle }
+    .img-thumb { width:72px; height:56px; object-fit:cover; border-radius:6px; }
+    textarea { width:100%; min-height:70px; }
+    .danger { background:#ff6b6b; color:white; }
+    .muted { opacity:0.75; font-size:0.88rem; }
+    .inline { display:inline-flex; gap:8px; align-items:center; }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <div>
+      <h1 class="header">🛠️ FoodHub — Admin Panel</h1>
+      <div class="small muted">Manage feedback, menus, alerts and respond to students — client-side prototype</div>
+    </div>
+
+    <div class="inline">
+      <div class="small muted" id="adminBadge">Admin</div>
+      <button id="logoutBtn" class="btn">Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-grid">
+    <main>
+      <section class="card" id="feedbackCard">
+        <h2>💬 Student Feedback</h2>
+        <div class="small muted">Reply to feedback; replies appear on the student portal feedback wall.</div>
+
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button id="exportCsv" class="btn">Export CSV</button>
+          <button id="clearAllFeedback" class="btn danger">Clear All Feedback</button>
+          <button id="refreshBtn" class="btn">Refresh</button>
+        </div>
+
+        <table class="table" id="feedbackTable" style="margin-top:12px;">
+          <thead>
+            <tr><th>#</th><th>Rating</th><th>Text</th><th>Photo</th><th>Time</th><th>Reply</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="card" id="menuCard" style="margin-top:16px;">
+        <h2>📅 Weekly Menu & Alerts</h2>
+        <div class="small muted">Edit weekly menu, set gala menu & delay alerts.</div>
+
+        <div style="margin-top:10px; display:grid; gap:8px;">
+          <label>Day</label>
+          <select id="editDay" class="select">
+            <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+            <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+          </select>
+
+          <label>Breakfast</label>
+          <input id="editBreakfast" class="input" />
+          <label>Lunch</label>
+          <input id="editLunch" class="input" />
+          <label>Dinner</label>
+          <input id="editDinner" class="input" />
+          <label>Drink</label>
+          <input id="editDrink" class="input" />
+
+          <label>Special (Gala) Menu</label>
+          <input id="specialText" class="input" placeholder="E.g. Gala Dinner — Paneer Makhani + Kheer" />
+
+          <div style="display:flex;gap:8px;align-items:center;">
+            <label><input type="checkbox" id="markGala"> Mark as Gala / Special Day</label>
+            <label><input type="checkbox" id="markDelay"> Show Delay Alert</label>
+          </div>
+
+          <label>Delay Alert Text</label>
+          <input id="delayText" class="input" placeholder="E.g. ⚠️ Lunch delayed by 20 minutes" />
+
+          <div style="display:flex; gap:8px;">
+            <button id="saveMenuBtn" class="btn">Save for Day</button>
+            <button id="resetMenuBtn" class="btn">Reset Defaults</button>
+            <button id="publishAlertBtn" class="btn">Publish Alert</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:16px;">
+        <h2>📊 Ratings & Stats</h2>
+        <div class="small muted">Live overview</div>
+
+        <div style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;">
+          <div class="card" style="padding:8px;min-width:150px;">
+            <strong id="totalFeedback">0</strong><div class="small muted">Total feedback</div>
+          </div>
+          <div class="card" style="padding:8px;min-width:150px;">
+            <strong id="avgStars">0</strong><div class="small muted">Avg stars</div>
+          </div>
+          <div class="card" style="padding:8px;min-width:150px;">
+            <strong id="likedMealsCount">0</strong><div class="small muted">Unique liked meals</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <section class="card">
+        <h3>🔍 Recent Feedback</h3>
+        <ul id="recentList" class="small muted" style="margin-top:8px; padding-left:16px;"></ul>
+      </section>
+
+      <section class="card" style="margin-top:12px;">
+        <h3>⚙️ Utilities</h3>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+          <button id="downloadJson" class="btn">Download JSON</button>
+          <button id="clearStorage" class="btn danger">Clear localStorage</button>
+          <button id="rebuildIndices" class="btn">Rebuild indices</button>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:12px;">
+        <h3>ℹ️ Notes</h3>
+        <div class="small muted">Client-side demo only; no real backend.</div>
+      </section>
+    </aside>
+  </div>
+
+<script>
+/* ========= Storage Schema ========= */
+const defaultMenu = {
+  Monday: {breakfast:'Aloo Paratha with Curd', lunch:'Dal Tadka + Rice + Veg Fry', dinner:'Roti + Chicken Curry', drink:'Lassi', specialText:'', isGala:false, delayText:'', showDelay:false},
+  Tuesday: {breakfast:'Idli & Sambhar', lunch:'Rajma Chawal', dinner:'Roti + Paneer Masala', drink:'Lemon Water', specialText:'', isGala:false, delayText:'', showDelay:false},
+  Wednesday: {breakfast:'Poori Bhaji', lunch:'Veg Biryani, Raita', dinner:'Dal + Roti + Mix Veg', drink:'Buttermilk', specialText:'', isGala:false, delayText:'', showDelay:false},
+  Thursday: {breakfast:'Upma & Chutney', lunch:'Chole + Rice', dinner:'Roti + Egg Curry', drink:'Mango Shake', specialText:'', isGala:false, delayText:'', showDelay:false},
+  Friday: {breakfast:'Masala Dosa', lunch:'Fish Curry + Rice', dinner:'Roti + Paneer Do Pyaza', drink:'Jaljeera', specialText:'', isGala:false, delayText:'', showDelay:false},
+  Saturday: {breakfast:'Bread Omelette', lunch:'Fried Rice + Manchurian', dinner:'Khichdi + Papad', drink:'Cold Coffee', specialText:'', isGala:false, delayText:'', showDelay:false},
+  Sunday: {breakfast:'Chole Bhature', lunch:'Paneer Butter Masala + Naan', dinner:'Veg Pulao + Raita', drink:'Rose Milk', specialText:'', isGala:false, delayText:'', showDelay:false}
+};
+
+function readFeedback(){ return JSON.parse(localStorage.getItem('allFeedback') || '[]'); }
+function writeFeedback(arr){ localStorage.setItem('allFeedback', JSON.stringify(arr)); }
+
+function readMenu(){ return JSON.parse(localStorage.getItem('menuData') || JSON.stringify(defaultMenu)); }
+function writeMenu(m){ localStorage.setItem('menuData', JSON.stringify(m)); }
+
+function setSiteAlert(txt){ if (txt) localStorage.setItem('siteAlert', txt); else localStorage.removeItem('siteAlert'); }
+
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ===== Feedback Table ===== */
+function renderFeedbackTable(){
+  const tbody = document.querySelector('#feedbackTable tbody');
+  tbody.innerHTML = '';
+  const arr = readFeedback();
+
+  arr.forEach((f,i)=>{
+    const tr = document.createElement('tr');
+    const photo = f.photo ? `<img class="img-thumb" src="${f.photo}">` : '';
+    const response = f.response ? `
+      <div style="background:#f6f6f8;padding:8px;border-radius:8px;margin-top:6px;">
+        Reply (${escapeHtml(f.response.admin)}): 
+        <div class="small muted">${escapeHtml(f.response.text)}</div>
+        <div class="small muted">${escapeHtml(f.response.time)}</div>
+      </div>
+    ` : '';
+
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${escapeHtml(f.rating||'')}</td>
+      <td style="max-width:340px">${escapeHtml(f.text)}</td>
+      <td>${photo}</td>
+      <td>${escapeHtml(f.time)}</td>
+      <td>
+        <textarea data-i="${i}" class="replyBox" placeholder="Write reply...">${f.response ? escapeHtml(f.response.text) : ''}</textarea>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button data-i="${i}" class="btn replyBtn">Save Reply</button>
+          <button data-i="${i}" class="btn delBtn danger">Delete</button>
+        </div>
+        ${response}
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+  // Reply button
+  document.querySelectorAll('.replyBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = Number(btn.dataset.i);
+      const text = document.querySelector(`textarea[data-i="${i}"]`).value.trim();
+      if (!text) return alert("Reply cannot be empty");
+
+      const arr = readFeedback();
+      arr[i].response = {
+        admin: sessionStorage.getItem('userId') || "admin",
+        text,
+        time: new Date().toLocaleString()
+      };
+
+      writeFeedback(arr);
+      renderFeedbackTable();
+      alert("Reply saved!");
+    });
+  });
+
+  // Delete
+  document.querySelectorAll('.delBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if (!confirm("Delete this feedback?")) return;
+      const i = Number(btn.dataset.i);
+      const arr = readFeedback();
+      arr.splice(i,1);
+      writeFeedback(arr);
+      renderFeedbackTable();
+      renderStats();
+    });
+  });
+}
+
+/* ===== Menu Editor ===== */
+function populateEditor(){
+  const day = document.getElementById("editDay").value;
+  const m = readMenu()[day];
+  document.getElementById('editBreakfast').value = m.breakfast;
+  document.getElementById('editLunch').value = m.lunch;
+  document.getElementById('editDinner').value = m.dinner;
+  document.getElementById('editDrink').value = m.drink;
+  document.getElementById('specialText').value = m.specialText;
+  document.getElementById('markGala').checked = m.isGala;
+  document.getElementById('markDelay').checked = m.showDelay;
+  document.getElementById('delayText').value = m.delayText;
+}
+document.getElementById('editDay').addEventListener('change', populateEditor);
+
+document.getElementById('saveMenuBtn').addEventListener('click', ()=>{
+  const day = document.getElementById("editDay").value;
+  const menu = readMenu();
+
+  menu[day] = {
+    breakfast: document.getElementById('editBreakfast').value,
+    lunch: document.getElementById('editLunch').value,
+    dinner: document.getElementById('editDinner').value,
+    drink: document.getElementById('editDrink').value,
+    specialText: document.getElementById('specialText').value,
+    isGala: document.getElementById('markGala').checked,
+    showDelay: document.getElementById('markDelay').checked,
+    delayText: document.getElementById('delayText').value
+  };
+
+  writeMenu(menu);
+  alert("Menu saved for " + day);
+});
+
+document.getElementById('resetMenuBtn').addEventListener('click', ()=>{
+  if (!confirm("Reset menu to defaults?")) return;
+  writeMenu(defaultMenu);
+  populateEditor();
+});
+
+document.getElementById('publishAlertBtn').addEventListener('click', ()=>{
+  const txt = prompt("Enter site alert (leave blank to clear):", localStorage.getItem("siteAlert")||"");
+  if (txt === null) return;
+  setSiteAlert(txt.trim());
+  alert("Alert updated");
+});
+
+/* ===== CSV Export ===== */
+document.getElementById('exportCsv').addEventListener('click', ()=>{
+  const arr = readFeedback();
+  if (!arr.length) return alert("No feedback to export");
+
+  const rows = [['rating','text','photo','time','reply_admin','reply_time','reply_text']];
+  arr.forEach(f=>{
+    rows.push([
+      f.rating||"",
+      (f.text||"").replace(/\n/g," "),
+      f.photo||"",
+      f.time||"",
+      f.response?.admin||"",
+      f.response?.time||"",
+      (f.response?.text||"").replace(/\n/g," ")
+    ]);
+  });
+
+  const csv = rows.map(r => r.map(c=>`"${c}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv"});
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url; a.download = "feedback.csv"; a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ===== Utilities ===== */
+document.getElementById('clearAllFeedback').addEventListener('click', ()=>{
+  if (!confirm("Delete ALL feedback?")) return;
+  writeFeedback([]);
+  renderFeedbackTable();
+  renderStats();
+});
+
+document.getElementById('downloadJson').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(readFeedback(), null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'feedback.json'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('clearStorage').addEventListener('click', ()=>{
+  if (!confirm("Clear ALL localStorage?")) return;
+  localStorage.clear();
+  sessionStorage.clear();
+  renderFeedbackTable();
+  renderStats();
+  populateEditor();
+});
+
+document.getElementById('rebuildIndices').addEventListener('click', ()=>{
+  alert("Rebuilt (no-op)");
+});
+
+/* ===== Stats ===== */
+function renderStats(){
+  const arr = readFeedback();
+  document.getElementById('totalFeedback').innerText = arr.length;
+  document.getElementById('avgStars').innerText = arr.length
+    ? (arr.reduce((sum,f)=>sum+Number(f.rating||0),0) / arr.length).toFixed(1)
+    : 0;
+  const liked = JSON.parse(localStorage.getItem('likedMeals')||'[]');
+  document.getElementById('likedMealsCount').innerText = liked.length;
+
+  const recent = arr.slice().reverse().slice(0,6);
+  const ul = document.getElementById('recentList');
+  ul.innerHTML = "";
+  recent.forEach(f=>{
+    const li = document.createElement('li');
+    li.textContent = (f.time||"") + " — " + (f.text||"").slice(0,80);
+    ul.appendChild(li);
+  });
+}
+
+/* ===== Init ===== */
+function init(){
+  // Redirect non-admin users
+  if (sessionStorage.getItem("userType") !== "admin") {
+    window.location.href = "index.html"; // FIXED
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    sessionStorage.removeItem('userType');
+    sessionStorage.removeItem('userId');
+    window.location.href = "index.html";  // FIXED
+  });
+
+  if (!localStorage.getItem('menuData')) writeMenu(defaultMenu);
+  renderFeedbackTable();
+  renderStats();
+  populateEditor();
+}
+init();
+
+/* ===== Sync when storage changes in other tabs ===== */
+window.addEventListener('storage', ()=>{
+  renderFeedbackTable();
+  renderStats();
+  populateEditor();
+});
+</script>
+</body>
+</html>
