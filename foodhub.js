@@ -1,176 +1,156 @@
-/* MENU DATA */
-const menus = {
-  Monday:   { breakfast:"Poha", lunch:"Dal + Rice", dinner:"Paneer", drink:"Tea" },
-  Tuesday:  { breakfast:"Idli", lunch:"Rajma Rice", dinner:"Egg Curry", drink:"Buttermilk" },
-  Wednesday:{ breakfast:"Upma", lunch:"Chole Rice", dinner:"Veg Pulao", drink:"Lassi", special:true },
-  Thursday: { breakfast:"Paratha", lunch:"Dal Fry", dinner:"Paneer Kadai", drink:"Juice" },
-  Friday:   { breakfast:"Sandwich", lunch:"Kadhi", dinner:"Biryani", drink:"Tea" },
-  Saturday: { breakfast:"Dosa", lunch:"Manchurian", dinner:"Soya Masala", drink:"Lime Soda" },
-  Sunday:   { breakfast:"Poori Chole", lunch:"Special Meal", dinner:"Khichdi", drink:"Sweet Lassi", special:true }
+/* ====== DARK MODE TOGGLE ====== */
+document.getElementById("themeToggle").addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+        document.getElementById("themeToggle").textContent = "☀️";
+    } else {
+        document.getElementById("themeToggle").textContent = "🌙";
+    }
+});
+
+/* ====== MENU DATA ====== */
+const weeklyMenu = {
+    Monday: {
+        breakfast: "Idli + Sambar",
+        lunch: "Rice + Dal + Veg Curry",
+        dinner: "Roti + Chicken Curry",
+        drink: "Lassi"
+    },
+    Tuesday: {
+        breakfast: "Poha",
+        lunch: "Rajma Chawal",
+        dinner: "Fried Rice + Manchurian",
+        drink: "Juice"
+    },
+    Wednesday: {
+        breakfast: "Masala Dosa ⭐",
+        lunch: "Veg Biryani ⭐",
+        dinner: "Paneer Tikka ⭐",
+        drink: "Badam Milk"
+    },
+    Thursday: {
+        breakfast: "Aloo Paratha",
+        lunch: "Khichdi",
+        dinner: "Roti + Egg Curry",
+        drink: "Nimbu Pani"
+    },
+    Friday: {
+        breakfast: "Upma",
+        lunch: "Dal Tadka",
+        dinner: "Pulao + Chicken Fry",
+        drink: "Sweet Lassi"
+    },
+    Saturday: {
+        breakfast: "Chole Bhature",
+        lunch: "Curd Rice",
+        dinner: "Veg Manchurian",
+        drink: "Lemon Soda"
+    },
+    Sunday: {
+        breakfast: "Poori Sabji ⭐",
+        lunch: "Hyderabadi Biryani ⭐",
+        dinner: "Paneer Butter Masala ⭐",
+        drink: "Cold Coffee"
+    }
 };
 
-const daySelect = document.getElementById("daySelect");
-const breakfastItem = document.getElementById("breakfastItem");
-const lunchItem = document.getElementById("lunchItem");
-const dinnerItem = document.getElementById("dinnerItem");
-const drinkItem = document.getElementById("drinkItem");
-const menuHeader = document.getElementById("menuHeader");
-const menuBox = document.getElementById("menuDisplay"); // optional container if exists
+/* ====== DISPLAY MENU ====== */
+function updateMenu() {
+    const day = document.getElementById("daySelect").value;
 
-function loadMenu() {
-  const day = daySelect.value;
-  const menu = menus[day];
+    document.getElementById("breakfastItem").textContent = weeklyMenu[day].breakfast;
+    document.getElementById("lunchItem").textContent = weeklyMenu[day].lunch;
+    document.getElementById("dinnerItem").textContent = weeklyMenu[day].dinner;
+    document.getElementById("drinkItem").textContent = weeklyMenu[day].drink;
 
-  // Fill menu items with emojis
-  breakfastItem.innerHTML = "🍳 " + menu.breakfast;
-  lunchItem.innerHTML     = "🍛 " + menu.lunch;
-  dinnerItem.innerHTML    = "🌙 " + menu.dinner;
-  drinkItem.innerHTML     = "🥤 " + menu.drink;
+    const banner = document.getElementById("menuHeader");
+    banner.style.display = "none";
+    banner.className = "special-banner";
 
-  // Reset special styling
-  menuHeader.style.display = "none";
-  menuHeader.className = "special-banner";
-  breakfastItem.classList.remove("special-item");
-  lunchItem.classList.remove("special-item");
-  dinnerItem.classList.remove("special-item");
-  drinkItem.classList.remove("special-item");
+    if (day === "Wednesday") {
+        banner.style.display = "block";
+        banner.classList.add("wed-special");
+        banner.textContent = "💚 Wednesday Special Menu!";
+    }
 
-  // Highlight special days
-  if(menu.special){
-    menuHeader.innerHTML = "✨ SPECIAL MENU TODAY ✨";
-    menuHeader.style.display = "block";
+    if (day === "Sunday") {
+        banner.style.display = "block";
+        banner.classList.add("sun-special");
+        banner.textContent = "🌟 Sunday Special Menu!";
+    }
 
-    if(day === "Wednesday") menuHeader.classList.add("wednesday-special");
-    if(day === "Sunday") menuHeader.classList.add("sunday-special");
-
-    breakfastItem.classList.add("special-item");
-    lunchItem.classList.add("special-item");
-    dinnerItem.classList.add("special-item");
-    drinkItem.classList.add("special-item");
-  }
+    checkDelay(day);
 }
 
-daySelect.addEventListener("change", loadMenu);
-loadMenu();
+document.getElementById("daySelect").addEventListener("change", updateMenu);
+updateMenu();
 
-/* RATING SYSTEM */
-let rating = 0;
-let quickRating = null;
+/* ====== DELAYS ====== */
+function checkDelay(day) {
+    const alertBox = document.getElementById("delayAlert");
 
-document.getElementById("likeBtn").onclick = () => { quickRating = "Liked 👍"; };
-document.getElementById("dislikeBtn").onclick = () => { quickRating = "Disliked 👎"; };
+    if (day === "Monday") {
+        alertBox.style.display = "block";
+        alertBox.innerHTML = "⚠️ <b>Important Notice:</b> Lunch may be delayed today.";
+    } 
+    else if (day === "Thursday") {
+        alertBox.style.display = "block";
+        alertBox.innerHTML = "⚠️ <b>Important Notice:</b> Dinner may be delayed today.";
+    } 
+    else {
+        alertBox.style.display = "none";
+    }
+}
 
-document.querySelectorAll("#stars span").forEach(star => {
-  star.onclick = () => {
-    rating = star.dataset.star;
-    updateStars();
-  };
+
+/* ====== FAVORITE MEALS ====== */
+let favoriteMeals = JSON.parse(localStorage.getItem("favorites")) || [];
+let ratings = JSON.parse(localStorage.getItem("ratings")) || [];
+
+/* Like a meal */
+document.querySelector(".like-btn").addEventListener("click", () => {
+    const mealName = document.querySelector(".meal-card").dataset.meal;
+
+    if (!favoriteMeals.includes(mealName)) {
+        favoriteMeals.push(mealName);
+        localStorage.setItem("favorites", JSON.stringify(favoriteMeals));
+        updateFavorites();
+    }
 });
 
-function updateStars() {
-  document.querySelectorAll("#stars span").forEach(s => {
-    s.style.color = s.dataset.star <= rating ? "gold" : "gray";
-  });
-}
-
-/* FEEDBACK SYSTEM */
-const form = document.getElementById("feedbackForm");
-const feedbackWall = document.getElementById("feedbackWall");
-const photoInput = document.getElementById("photoInput");
-const photoPreview = document.getElementById("photoPreview");
-
-photoInput.addEventListener("change", function () {
-  const file = this.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      photoPreview.src = e.target.result;
-      photoPreview.style.display = "block";
-    };
-    reader.readAsDataURL(file);
-  }
+/* Rating for meal */
+document.querySelectorAll(".rate-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const rateValue = Number(btn.dataset.rate);
+        ratings.push(rateValue);
+        localStorage.setItem("ratings", JSON.stringify(ratings));
+        updateStats();
+    });
 });
 
-form.addEventListener("submit", e => {
-  e.preventDefault();
+/* Update UI */
+function updateFavorites() {
+    const list = document.getElementById("favoriteMeals");
+    list.innerHTML = "";
 
-  const fb = {
-    day: daySelect.value,
-    quickRating,
-    rating,
-    text: document.getElementById("feedbackText").value,
-    photo: photoPreview.style.display === "block" ? photoPreview.src : null,
-    time: new Date().toLocaleString()
-  };
-
-  const list = JSON.parse(localStorage.getItem("feedbackList")) || [];
-  list.unshift(fb);
-  localStorage.setItem("feedbackList", JSON.stringify(list));
-
-  loadFeedback();
-
-  form.reset();
-  rating = 0; quickRating = null;
-  photoPreview.style.display = "none";
-  updateStars();
-});
-
-function loadFeedback() {
-  const list = JSON.parse(localStorage.getItem("feedbackList")) || [];
-  feedbackWall.innerHTML = "";
-
-  list.forEach(fb => {
-    feedbackWall.innerHTML += `
-      <div class="feedback-card">
-        <p><strong>${fb.day}</strong> | ⭐ ${fb.rating} | ${fb.quickRating || ""}</p>
-        <p>${fb.text || ""}</p>
-        ${fb.photo ? `<img src="${fb.photo}" class="preview">` : ""}
-        <small>${fb.time}</small>
-      </div>`;
-  });
+    favoriteMeals.forEach(meal => {
+        const li = document.createElement("li");
+        li.textContent = `❤️ ${meal}`;
+        list.appendChild(li);
+    });
 }
 
-/* AI-LIKE SUMMARY MAKER */
-function generateSummary() {
-  const list = JSON.parse(localStorage.getItem("feedbackList")) || [];
-  if(list.length === 0){
-    document.getElementById("summaryOutput").innerText = "No feedback yet.";
-    return;
-  }
+function updateStats() {
+    document.getElementById("likedCount").textContent = favoriteMeals.length;
 
-  let text = list.map(f=>f.text.toLowerCase()).join(" ");
-  const positives = ["good", "nice", "tasty", "improved", "great"];
-  const negatives = ["bad", "oily", "worst", "dirty", "late", "poor"];
-
-  let posCount = positives.filter(w=>text.includes(w)).length;
-  let negCount = negatives.filter(w=>text.includes(w)).length;
-
-  let sentiment = "😐 Neutral";
-  if(posCount > negCount) sentiment = "😊 Mostly Positive";
-  if(negCount > posCount) sentiment = "😞 Mostly Negative";
-
-  let summary =
-    `Sentiment: ${sentiment}\n\n` +
-    `Common Issues: ${
-      text.includes("oily") ? "Oily food, " : ""
-    }${
-      text.includes("late") ? "Late serving, " : ""
-    }${
-      text.includes("quantity") ? "Quantity issues, " : ""
-    }`;
-
-  document.getElementById("summaryOutput").innerText = summary;
+    if (ratings.length === 0) {
+        document.getElementById("avgRating").textContent = "0";
+    } else {
+        const avg = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1);
+        document.getElementById("avgRating").textContent = avg;
+    }
 }
 
-/* DARK MODE */
-document.getElementById("themeToggle").onclick = () => {
-  document.body.classList.toggle("dark");
-};
-
-
-
-
-
-
-
-
+updateFavorites();
+updateStats();
