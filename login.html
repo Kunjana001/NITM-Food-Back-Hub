@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIT Meghalaya Hostel Login</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+  <div class="background">
+    <div class="overlay"></div>
+  </div>
+
+  <div class="login-card">
+
+    <img src="logo.jpeg" class="nit-logo" alt="NIT Meghalaya Logo">
+
+    <h1 class="portal-title">NIT Meghalaya</h1>
+    <h2 class="portal-subtitle">Hostel Mess Portal</h2>
+
+    <div class="selection-box">
+      <label class="label">Select User Type</label>
+      <select id="userType" class="input">
+        <option value="">-- Select --</option>
+        <option value="student">Student</option>
+        <option value="staff">Staff</option>
+      </select>
+    </div>
+
+    <div id="studentInput" class="selection-box hidden">
+      <label class="label">Enter Roll Number</label>
+      <input type="text" id="rollInput" placeholder="Format: 23CS123" class="input">
+    </div>
+
+    <div id="staffInput" class="selection-box hidden">
+      <label class="label">Enter Name</label>
+      <input type="text" id="nameInput" placeholder="Enter your name" class="input">
+    </div>
+
+    <button id="loginBtn" class="btn">Continue →</button>
+
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
+
