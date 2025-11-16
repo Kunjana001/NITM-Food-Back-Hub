@@ -1,3 +1,4 @@
+
 /* =======================
    GLOBAL THEME
 ======================= */
@@ -156,6 +157,30 @@ h2, h3 {
 .dark-mode .feedback-wall {
   background: #2f2f4f;
 }
+/* =======================
+   STAR RATING (CSS)
+======================= */
+.stars {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 20px;
+}
+
+.stars span {
+    font-size: 30px;
+    cursor: pointer;
+    color: #ccc; /* Default grey color */
+    transition: color 0.2s, transform 0.2s;
+}
+
+.stars span:hover {
+    color: gold;
+    transform: scale(1.1);
+}
+
+.stars span.selected {
+    color: gold; /* Highlighted color */
+}
 
 /* =======================
    STATS SECTION
@@ -265,4 +290,146 @@ h2, h3 {
   max-width: 200px;
   border-radius: 10px;
   border: 2px solid #ddd;
+}
+/* --------------------------------------
+   INDIVIDUAL MEAL RATING ALIGNMENT
+-------------------------------------- */
+
+.meal-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px auto;
+    width: 95%;
+    max-width: 1100px;
+}
+
+.meal-card {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+
+.dark .meal-card {
+    background: #2e2e2e;
+    color: white;
+}
+
+.meal-card:hover {
+    transform: translateY(-5px);
+}
+
+.like-btn {
+    background: #ff4d6d;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.like-btn:hover {
+    background: #ff3357;
+}
+
+.rating {
+    margin-top: 10px;
+}
+
+.rate-btn {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.2s;
+}
+
+.rate-btn:hover,
+.rate-btn.selected {
+    color: gold;
+    transform: scale(1.2);
+}
+
+/* Center the entire section */
+#stats-section, 
+.meal-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+rate-btn.selected
+/* Update the existing meal rating CSS in foodhub.css */
+/* --------------------------------------
+   INDIVIDUAL MEAL RATING ALIGNMENT
+-------------------------------------- */
+
+/* ... (other meal-list and meal-card styles) ... */
+
+.rate-btn {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.2s;
+    color: #ccc; /* Add default color */
+}
+
+.rate-btn:hover,
+.rate-btn.selected { /* Ensure .selected is correctly styled */
+    color: gold;
+    transform: scale(1.2);
+}
+/* --------------------------------------
+   INDIVIDUAL MEAL RATING ALIGNMENT
+-------------------------------------- */
+/* ... (existing styles) ... */
+
+.rate-btn {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.2s;
+    /* FIX: Set a default color (e.g., grey) for unselected stars */
+    color: #ccc; 
+}
+
+.rate-btn:hover {
+    color: gold;
+    transform: scale(1.2);
+}
+
+.rate-btn.selected { /* Ensure the selected state is styled */
+    color: gold;
+    transform: scale(1.2);
+}
+/* =======================
+   FEEDBACK FORM STARS
+======================= */
+.stars {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 20px;
+}
+
+.stars span {
+    font-size: 30px;
+    cursor: pointer;
+    /* FIX: Set a default color (e.g., grey) */
+    color: #ccc; 
+    transition: color 0.2s, transform 0.2s;
+}
+
+.stars span:hover {
+    color: gold;
+    transform: scale(1.1);
+}
+
+.stars span.selected {
+    /* FIX: Set the highlighted color */
+    color: gold; 
 }
