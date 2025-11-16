@@ -433,3 +433,53 @@ rate-btn.selected
     /* FIX: Set the highlighted color */
     color: gold; 
 }
+/* ---------------- DARK THEME FIX ---------------- */
+
+.dark-theme {
+  background: #121212;
+  color: #fff;
+}
+
+.dark-theme .header {
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.dark-theme h1, 
+.dark-theme h2, 
+.dark-theme h3, 
+.dark-theme p, 
+.dark-theme label {
+  color: #fff;
+}
+
+.dark-theme .container {
+  background: #1a1a1a;
+}
+
+.dark-theme select,
+.dark-theme .input,
+.dark-theme textarea,
+.dark-theme .input-file {
+  background: #222;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.dark-theme .feedback-box {
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.dark-theme .submit-btn,
+.dark-theme .btn,
+.dark-theme .like-btn {
+  background: #444;
+  color: white;
+}
+
+.dark-theme .meal-card {
+  background: #1f1f1f;
+  color: #fff;
+  border: 1px solid #555;
+}
